@@ -9,11 +9,21 @@ namespace PasswordManager
     class StartUpActions
     {
         private Constants _constants = new Constants();
-        public void StartWithPasswordFromInputBox()
+        private String _inputBoxString = "Enter your password:";
+        private String _convertedPasswd;
+
+        public CryptoOperations bce = new CryptoOperations();
+        public String convertedPwd { get; }
+        public String StartWithPasswordFromInputBox()
         {
-            string input = Microsoft.VisualBasic.Interaction.InputBox("Enter your password", "Let's get started!", "here", -1, -1);
+            if (!_constants.passwordFileExists)
+            {
+                _inputBoxString = "Enter your new password:";
+            }
+            string input = Microsoft.VisualBasic.Interaction.InputBox(_inputBoxString, "Let's get started!", "here", -1, -1);
             PasswordConverter paswdConverter = new PasswordConverter(input);
-            Console.WriteLine("Password: {0} ", paswdConverter.ConvertPwdTo16Bytes());
+            _convertedPasswd = paswdConverter.ConvertPwdTo16Bytes();
+            Console.WriteLine("Password: {0} ", _convertedPasswd);
             if (_constants.passwordFileExists)
             {
                 // decrypt
@@ -23,6 +33,7 @@ namespace PasswordManager
                 // we're done
                 Console.WriteLine("We're done!");
             }
+            return _convertedPasswd;
         }
 
 
