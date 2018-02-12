@@ -13,6 +13,7 @@ namespace PasswordManager
         private String _convertedPasswd;
 
         public CryptoOperations bce = new CryptoOperations();
+        public SecretManager secretManager = new SecretManager();
         public String convertedPwd { get; }
         public String StartWithPasswordFromInputBox()
         {
@@ -27,6 +28,7 @@ namespace PasswordManager
             if (_constants.passwordFileExists)
             {
                 // decrypt
+               
             }
             else
             {

@@ -9,7 +9,7 @@ namespace PasswordManager
 {
     class Constants
     {
-        const String _passwordFile = "C:\\Users\\hanndo\\Documents\\PasswordManager\\passwords.txt";
+        const String _passwordFile = "C:\\Users\\donal\\Documents\\PasswordManager\\passwords.txt";
 
         public String passwordFile { get; } = _passwordFile;
 

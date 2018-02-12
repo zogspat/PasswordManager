@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,26 +9,48 @@ namespace PasswordManager
 {
     public interface ISecretManager
     {
-        void AddSecret(SecretThing newSecret);
+        void AddSecret(SecretThing newSecret, String convertedPasswd);
         void ListSecrets(List <SecretThing> allSecrets);
          
     }
     public class SecretManager : ISecretManager
     {
-        public void AddSecret(SecretThing newSecret)
+        private Constants constants = new Constants();
+        public void AddSecret(SecretThing newSecret, String convertedPasswd)
         {
-            // convert to a single string with |+| as separators
+            RecordManipulator converter = new RecordManipulator();
+            String convertedRec = converter.ConvertSecretToString(newSecret);
             CryptoOperations encryption = new CryptoOperations();
-            String result = encryption.AESEncryption("input string lets make it a bit longer", "1234567890123456", true);
-            Console.WriteLine("result: " + result);
-            // encrypt the string
-            // write the string as a new line in text file
-            // update the interface.
+            String encryptedRec = encryption.AESEncryption(convertedRec, convertedPasswd, true);
+            if (constants.passwordFileExists)
+            {
+                AppendToFile(encryptedRec);
+            }
+            else
+            {
+                CreateNewFile(encryptedRec);
+            }
         }
 
         public void ListSecrets(List<SecretThing> allSecrets)
         {
 
+        }
+
+        private void AppendToFile(String encryptedRec)
+        {
+            using (StreamWriter sw = File.AppendText(constants.passwordFile))
+            {
+                sw.WriteLine(encryptedRec);
+            }
+        }
+
+        private void CreateNewFile(String encryptedRec)
+        {
+            using (StreamWriter sw = File.CreateText(constants.passwordFile))
+            {
+                sw.WriteLine(encryptedRec);
+            }
         }
     }
 }
