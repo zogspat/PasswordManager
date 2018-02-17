@@ -41,13 +41,16 @@
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.showHideButton = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.passwordLabel = new System.Windows.Forms.Label();
+            this.pwdTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(418, 117);
+            this.label2.Location = new System.Drawing.Point(468, 170);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 29);
             this.label2.TabIndex = 0;
@@ -57,7 +60,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(420, 160);
+            this.label3.Location = new System.Drawing.Point(470, 213);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(66, 29);
             this.label3.TabIndex = 1;
@@ -67,7 +70,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(384, 204);
+            this.label4.Location = new System.Drawing.Point(434, 257);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(123, 29);
             this.label4.TabIndex = 2;
@@ -77,7 +80,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(427, 298);
+            this.label5.Location = new System.Drawing.Point(477, 351);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(60, 29);
             this.label5.TabIndex = 3;
@@ -86,7 +89,7 @@
             // titleTextBox
             // 
             this.titleTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.titleTextBox.Location = new System.Drawing.Point(472, 114);
+            this.titleTextBox.Location = new System.Drawing.Point(575, 167);
             this.titleTextBox.Name = "titleTextBox";
             this.titleTextBox.Size = new System.Drawing.Size(186, 35);
             this.titleTextBox.TabIndex = 4;
@@ -94,7 +97,7 @@
             // urlTextBox
             // 
             this.urlTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.urlTextBox.Location = new System.Drawing.Point(472, 157);
+            this.urlTextBox.Location = new System.Drawing.Point(575, 210);
             this.urlTextBox.Name = "urlTextBox";
             this.urlTextBox.Size = new System.Drawing.Size(186, 35);
             this.urlTextBox.TabIndex = 5;
@@ -102,7 +105,7 @@
             // commentTextBox
             // 
             this.commentTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.commentTextBox.Location = new System.Drawing.Point(472, 201);
+            this.commentTextBox.Location = new System.Drawing.Point(575, 254);
             this.commentTextBox.Name = "commentTextBox";
             this.commentTextBox.Size = new System.Drawing.Size(186, 35);
             this.commentTextBox.TabIndex = 6;
@@ -110,14 +113,14 @@
             // keyTextBox
             // 
             this.keyTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.keyTextBox.Location = new System.Drawing.Point(472, 295);
+            this.keyTextBox.Location = new System.Drawing.Point(575, 348);
             this.keyTextBox.Name = "keyTextBox";
             this.keyTextBox.Size = new System.Drawing.Size(186, 35);
             this.keyTextBox.TabIndex = 7;
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(583, 348);
+            this.saveButton.Location = new System.Drawing.Point(686, 401);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 8;
@@ -133,11 +136,12 @@
             this.secretsListBox.Name = "secretsListBox";
             this.secretsListBox.Size = new System.Drawing.Size(369, 544);
             this.secretsListBox.TabIndex = 9;
+            this.secretsListBox.SelectedIndexChanged += new System.EventHandler(this.secretsListBox_SelectedIndexChanged_1);
             // 
             // passwordTextBox
             // 
             this.passwordTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.passwordTextBox.Location = new System.Drawing.Point(472, 249);
+            this.passwordTextBox.Location = new System.Drawing.Point(575, 302);
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.PasswordChar = '*';
             this.passwordTextBox.Size = new System.Drawing.Size(186, 35);
@@ -147,7 +151,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(384, 252);
+            this.label6.Location = new System.Drawing.Point(434, 305);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(126, 29);
             this.label6.TabIndex = 11;
@@ -155,7 +159,7 @@
             // 
             // showHideButton
             // 
-            this.showHideButton.Location = new System.Drawing.Point(472, 348);
+            this.showHideButton.Location = new System.Drawing.Point(575, 401);
             this.showHideButton.Name = "showHideButton";
             this.showHideButton.Size = new System.Drawing.Size(75, 23);
             this.showHideButton.TabIndex = 12;
@@ -163,9 +167,42 @@
             this.showHideButton.UseVisualStyleBackColor = true;
             this.showHideButton.Click += new System.EventHandler(this.showHideButton_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(575, 460);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 13;
+            this.button1.Text = "Clear";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // passwordLabel
+            // 
+            this.passwordLabel.AutoSize = true;
+            this.passwordLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.passwordLabel.Location = new System.Drawing.Point(425, 88);
+            this.passwordLabel.Name = "passwordLabel";
+            this.passwordLabel.Size = new System.Drawing.Size(126, 29);
+            this.passwordLabel.TabIndex = 14;
+            this.passwordLabel.Text = "Password:";
+            // 
+            // pwdTextBox
+            // 
+            this.pwdTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pwdTextBox.Location = new System.Drawing.Point(577, 88);
+            this.pwdTextBox.Name = "pwdTextBox";
+            this.pwdTextBox.PasswordChar = '*';
+            this.pwdTextBox.Size = new System.Drawing.Size(186, 35);
+            this.pwdTextBox.TabIndex = 15;
+            this.pwdTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EnterPressedOnPwd);
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(917, 751);
+            this.Controls.Add(this.pwdTextBox);
+            this.Controls.Add(this.passwordLabel);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.showHideButton);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.passwordTextBox);
@@ -203,6 +240,9 @@
         private System.Windows.Forms.TextBox passwordTextBox;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button showHideButton;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label passwordLabel;
+        private System.Windows.Forms.TextBox pwdTextBox;
     }
 }
 

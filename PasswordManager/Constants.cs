@@ -9,11 +9,13 @@ namespace PasswordManager
 {
     class Constants
     {
-        const String _passwordFile = "C:\\Users\\donal\\Documents\\PasswordManager\\passwords.txt";
+        //const String _passwordFile = "C:\\Users\\donal\\Documents\\PasswordManager\\passwords.txt";
 
-        public String passwordFile { get; } = _passwordFile;
+        const String _sqliteFile = "C:\\Users\\donal\\Documents\\PasswordManager\\MyDatabase.sqlite";
 
-        public Boolean passwordFileExists { get; } = File.Exists(_passwordFile); 
+        public String databaseFile { get; } = _sqliteFile;
+
+        public Boolean databaseExists { get; } = File.Exists(_sqliteFile);
 
     }
 }

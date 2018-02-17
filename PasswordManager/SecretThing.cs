@@ -8,6 +8,7 @@ namespace PasswordManager
 {
     public class SecretThing
     {
+        public int secretId { get; set; }
         public String title { get; set; }
         public String password { get; set; }
         public String url { get; set; }

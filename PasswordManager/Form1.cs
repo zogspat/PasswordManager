@@ -12,10 +12,11 @@ namespace PasswordManager
 {
     public partial class Form1 : Form
     {
-
-        private String _convertedPassword;
-
         private StartUpActions _kickoff = new StartUpActions();
+        private Constants constants = new Constants();
+        private DatabaseActions dbActions = new DatabaseActions();
+        private CryptoOperations cryptoOps = new CryptoOperations();
+        private String _convertedPwd;
         public Form1()
         {
             InitializeComponent();
@@ -23,18 +24,18 @@ namespace PasswordManager
         }
 
         private void Form1_Shown(object sender, EventArgs e)
-        {
+       {
+            if (!constants.databaseExists)
+            {
+                passwordLabel.Text = "New Password:";
+            }
             Console.WriteLine("We're off!");
-            _convertedPassword = _kickoff.StartWithPasswordFromInputBox();
             List<string> _items = new List<string>();
             _items.Add("One"); // <-- Add these
             _items.Add("Two");
             _items.Add("Three");
 
             secretsListBox.DataSource = _items;
-
-
-
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -52,8 +53,9 @@ namespace PasswordManager
                 newSecret.comment = commentTextBox.Text;
                 newSecret.password = passwordTextBox.Text;
                 newSecret.privateKey = keyTextBox.Text;
-                _kickoff.secretManager.AddSecret(newSecret, _convertedPassword);
-                String _oneLiner = ConvertInputToString();
+                newSecret.secretId = 1;
+                dbActions.WriteSingleResult()
+                //String _oneLiner = ConvertInputToString();
             }
 
         }
@@ -63,6 +65,7 @@ namespace PasswordManager
 
         }
 
+        // leaving for now, but to delete...
         private String ConvertInputToString()
         {
             String _concatStr = titleTextBox.Text + "||o||" + urlTextBox.Text + "||o||" + commentTextBox.Text + "||o||" + passwordTextBox.Text + "||o||" + keyTextBox.Text;
@@ -71,19 +74,34 @@ namespace PasswordManager
 
         private void showHideButton_Click(object sender, EventArgs e)
         {
-
+            Console.WriteLine("listbox: {0}", secretsListBox.Text);
         }
 
-        private void secretsListBox_SelectedIndexChanged(object sender, System.EventArgs e)
+        private void secretsListBox_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            // Get the currently selected item in the ListBox.
-            string curItem = secretsListBox.SelectedItem.ToString();
-            MessageBox.Show(curItem);
+           Console.WriteLine("I fired 3");
         }
 
-        private void listBox1_SelectedIndexChanged(object sender, System.EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("I fired");
+            titleTextBox.Text = "";
+            urlTextBox.Text = "";
+            commentTextBox.Text = "";
+            passwordTextBox.Text = "";
+            keyTextBox.Text = "";
         }
+
+
+        private void EnterPressedOnPwd(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                Console.WriteLine("Enter!!");
+                _kickoff.StartWithPasswordFromInputBox(pwdTextBox.Text);
+                
+            }
+
+        }
+
     }
 }

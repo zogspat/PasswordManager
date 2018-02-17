@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,25 +10,28 @@ namespace PasswordManager
     class StartUpActions
     {
         private Constants _constants = new Constants();
-        private String _inputBoxString = "Enter your password:";
         private String _convertedPasswd;
 
         public CryptoOperations bce = new CryptoOperations();
-        public SecretManager secretManager = new SecretManager();
-        public String convertedPwd { get; }
-        public String StartWithPasswordFromInputBox()
+        public DatabaseActions databaseActions = new DatabaseActions();
+        public String StartWithPasswordFromInputBox(String inputPasswd)
         {
-            if (!_constants.passwordFileExists)
+            if (!_constants.databaseExists)
             {
-                _inputBoxString = "Enter your new password:";
+                Console.WriteLine("Database doesn't exist....");
+                SQLiteConnection.CreateFile(_constants.databaseFile);
+                databaseActions.FirstRun(_constants.databaseFile);
             }
-            string input = Microsoft.VisualBasic.Interaction.InputBox(_inputBoxString, "Let's get started!", "here", -1, -1);
-            PasswordConverter paswdConverter = new PasswordConverter(input);
+            //string input = Microsoft.VisualBasic.Interaction.InputBox(_inputBoxString, "Let's get started!", "here", -1, -1);
+            PasswordConverter paswdConverter = new PasswordConverter(inputPasswd);
             _convertedPasswd = paswdConverter.ConvertPwdTo16Bytes();
             Console.WriteLine("Password: {0} ", _convertedPasswd);
-            if (_constants.passwordFileExists)
+            if (_constants.databaseExists)
             {
                 // decrypt
+                // NOT FIRING FOR SOME REASON....
+                int recCount = databaseActions.GetCount(_constants.databaseFile);
+                Console.WriteLine("database has {0} elements", recCount);
                
             }
             else

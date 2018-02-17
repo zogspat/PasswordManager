@@ -19,6 +19,31 @@ namespace PasswordManager
         Encoding _encoding = Encoding.ASCII;
         Pkcs7Padding pkcs = new Pkcs7Padding();
         public IBlockCipherPadding _padding;
+
+        public SecretThing EncryptSecret(SecretThing plainTextSecret, String key)
+        {
+            SecretThing tempForEncryptedVals = new SecretThing();
+            tempForEncryptedVals.title = AESEncryption(plainTextSecret.title, key, true);
+            tempForEncryptedVals.url = AESEncryption(plainTextSecret.url, key, true);
+            tempForEncryptedVals.comment = AESEncryption(plainTextSecret.comment, key, true);
+            tempForEncryptedVals.password = AESEncryption(plainTextSecret.password, key, true);
+            tempForEncryptedVals.privateKey = AESEncryption(plainTextSecret.privateKey, key, true);
+            tempForEncryptedVals.secretId = plainTextSecret.secretId;
+            return tempForEncryptedVals;
+        }
+
+        public SecretThing DecryptSecret(SecretThing encryptedSecret, String key)
+        {
+            SecretThing tempForDecryptedVals = new SecretThing();
+            tempForDecryptedVals.title = AESDecryption(encryptedSecret.title, key, true);
+            tempForDecryptedVals.url = AESDecryption(encryptedSecret.url, key, true);
+            tempForDecryptedVals.comment = AESDecryption(encryptedSecret.comment, key, true);
+            tempForDecryptedVals.password = AESDecryption(encryptedSecret.password, key, true);
+            tempForDecryptedVals.privateKey = AESDecryption(encryptedSecret.privateKey, key, true);
+            tempForDecryptedVals.secretId = encryptedSecret.secretId;
+            return tempForDecryptedVals;
+        }
+
         public string AESEncryption(string plain, string key, bool fips)
         {
             Console.WriteLine("AESEncryption: {0}; key: {1})", plain, key);
