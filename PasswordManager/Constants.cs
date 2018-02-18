@@ -9,9 +9,9 @@ namespace PasswordManager
 {
     class Constants
     {
-        //const String _passwordFile = "C:\\Users\\donal\\Documents\\PasswordManager\\passwords.txt";
+        const String _sqliteFile = "C:\\Users\\hanndo\\Documents\\PasswordManager\\MyDatabase.sqlite";
 
-        const String _sqliteFile = "C:\\Users\\donal\\Documents\\PasswordManager\\MyDatabase.sqlite";
+        //const String _sqliteFile = "C:\\Users\\donal\\Documents\\PasswordManager\\MyDatabase.sqlite";
 
         public String databaseFile { get; } = _sqliteFile;
 

@@ -54,7 +54,7 @@ namespace PasswordManager
                 newSecret.password = passwordTextBox.Text;
                 newSecret.privateKey = keyTextBox.Text;
                 newSecret.secretId = 1;
-                dbActions.WriteSingleResult()
+                dbActions.WriteSingleResult(newSecret, _convertedPwd, constants.databaseFile);
                 //String _oneLiner = ConvertInputToString();
             }
 
@@ -97,7 +97,9 @@ namespace PasswordManager
             if (e.KeyCode == Keys.Enter)
             {
                 Console.WriteLine("Enter!!");
-                _kickoff.StartWithPasswordFromInputBox(pwdTextBox.Text);
+                PasswordConverter paswdConverter = new PasswordConverter(pwdTextBox.Text);
+                _convertedPwd = paswdConverter.ConvertPwdTo16Bytes();
+                _kickoff.StartWithPasswordFromInputBox(_convertedPwd);
                 
             }
 

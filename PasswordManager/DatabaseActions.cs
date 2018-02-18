@@ -11,13 +11,14 @@ namespace PasswordManager
     {
         void FirstRun(String databaseFilePath);
         int GetCount(String databaseFilePath);
-        SecretThing ReadSingleResult(int secretID, String databaseFilePath);
-        void WriteSingleResult(SecretThing inputSecret, String databaseFilePath);
+        SecretThing ReadSingleResult(int secretID, String convertedPwd, String databaseFilePath);
+        void WriteSingleResult(SecretThing inputSecret, String convertedpwd, String databaseFilePath);
     }
     public class DatabaseActions : IDatabaseActions
     {
         private SQLiteConnection sql_con;
         private SQLiteCommand sql_cmd;
+        private CryptoOperations crypt = new CryptoOperations();
 
         public void FirstRun(String databaseFilePath)
         {
@@ -25,7 +26,7 @@ namespace PasswordManager
             SQLiteConnection.CreateFile("databaseFilePath");
             SetConnection(databaseFilePath);
             // title url comment, password key
-            string sql = "create table secrets (secretid integer primary key, title varchar(50), url  varchar(75), password varchar(50), key varchar(200))";
+            string sql = "create table secrets (secretId integer primary key, title varchar(50), comment varchar(100), url varchar(100), password varchar(50), privateKey varchar(200))";
             ExecuteQuery(sql, databaseFilePath);
         }
 
@@ -35,12 +36,12 @@ namespace PasswordManager
             string sql = "select count(*) from secrets";
             SQLiteCommand command = new SQLiteCommand(sql, sql_con);
             sql_con.Open();
-            SQLiteDataReader reader = command.ExecuteReader();
-            // this is a bit of a guess
-            return (int)reader[""] ;
+            int countVal = Convert.ToInt32(command.ExecuteScalar());
+            return countVal;
         }
         private void ExecuteQuery(String txtQuery, String databaseFilePath)
         {
+            Console.WriteLine("ExecuteQuery: {0}", txtQuery);
             SetConnection(databaseFilePath);
             sql_con.Open();
             sql_cmd = sql_con.CreateCommand();
@@ -49,7 +50,7 @@ namespace PasswordManager
             sql_con.Close();
         }
 
-        public SecretThing ReadSingleResult(int secretID, String databaseFilePath)
+        public SecretThing ReadSingleResult(int secretID, String convertedPwd, String databaseFilePath)
         {
             String sql = "select * from secrets where secretId = " + secretID;
             SecretThing resultSecret = new SecretThing(); 
@@ -59,21 +60,42 @@ namespace PasswordManager
             // this breaks silently if there's more than 1.
             // it may break noisily if there's no result!
             resultSecret.title = reader["title"].ToString();
+            Console.WriteLine("title: {0}", resultSecret.title);
             resultSecret.comment = reader["comment"].ToString();
             resultSecret.url = reader["url"].ToString();
             resultSecret.password = reader["password"].ToString();
-            resultSecret.secretId = (int)reader["secretId"];
+            // This seems like going round the houses but...
+            String realtmp = reader["secretId"].ToString();
+            Console.WriteLine("secretIdL {0}", realtmp);
+            resultSecret.secretId = Int32.Parse(realtmp);
             resultSecret.privateKey = reader["privateKey"].ToString();
-            return resultSecret;
+            SecretThing unencryptedSecret = crypt.DecryptSecret(resultSecret, convertedPwd);
+            return unencryptedSecret;
         }
 
         // may need to change the return type to be a list containing the updated
         // contents of the table.
-        public void WriteSingleResult(SecretThing inputSecret, String databaseFilePath)
+        public void WriteSingleResult(SecretThing inputSecret, String convertedPwd, String databaseFilePath)
         {
-            String concat = inputSecret.title + "," + inputSecret.comment + "," + inputSecret.url + "," + inputSecret.password + "," + inputSecret.secretId + "," + inputSecret.privateKey;
-            String sql = "insert into secrets (title, comment, url, password, secretId, privateKey) values (" + concat + ")";
+            int countId = GetCount(databaseFilePath);
+            inputSecret.secretId = countId+1;
+            Console.WriteLine("inputSecret.secretId: {0}", inputSecret.secretId);
+            SecretThing encyptedSecret = crypt.EncryptSecret(inputSecret, convertedPwd);
+            String concat = "\"" + encyptedSecret.secretId + "\"," +
+                            "\"" + encyptedSecret.title + "\"," +
+                            "\"" + encyptedSecret.comment + "\"," +
+                            "\"" + encyptedSecret.url + "\"," +
+                            "\"" + encyptedSecret.password + "\"," +
+                            "\"" + encyptedSecret.privateKey + "\"";
+            Console.WriteLine("concat: {0}", concat);
+            String sql = "insert into secrets (secretId, title, comment, url, password, privateKey) values (" + concat + ")";
+            Console.WriteLine("sql string = {0}", sql);
             ExecuteQuery(sql, databaseFilePath);
+        }
+
+        public List<SecretThing> getAllRecords(int count, String databaseFilePath)
+        {
+
         }
 
         public void DeleteSingleResult(SecretThing inputSecret, String databaseFilePath)
