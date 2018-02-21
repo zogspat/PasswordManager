@@ -35,10 +35,10 @@ namespace PasswordManager
                 Console.WriteLine("up here");
                 int recCount = databaseActions.GetCount(_constants.databaseFile);
                 Console.WriteLine("database has {0} elements", recCount);
-                SecretThing tmpThing = new SecretThing();
-                tmpThing = databaseActions.ReadSingleResult(1, convertedPwd, _constants.databaseFile);
-                Console.WriteLine("back from the database and... {0}", tmpThing.title);
-               
+                if (recCount > 0)
+                {
+                        recsFromDb = databaseActions.getAllRecords(recCount, _constants.databaseFile, convertedPwd);
+                }
             }
             else
             {

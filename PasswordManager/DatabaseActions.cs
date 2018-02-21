@@ -13,6 +13,7 @@ namespace PasswordManager
         int GetCount(String databaseFilePath);
         SecretThing ReadSingleResult(int secretID, String convertedPwd, String databaseFilePath);
         void WriteSingleResult(SecretThing inputSecret, String convertedpwd, String databaseFilePath);
+        List<SecretThing> getAllRecords(int count, String databaseFilePath, String convertedPwd);
     }
     public class DatabaseActions : IDatabaseActions
     {
@@ -28,6 +29,7 @@ namespace PasswordManager
             // title url comment, password key
             string sql = "create table secrets (secretId integer primary key, title varchar(50), comment varchar(100), url varchar(100), password varchar(50), privateKey varchar(200))";
             ExecuteQuery(sql, databaseFilePath);
+            Console.WriteLine("just created a table called secrets. honest");
         }
 
         public int GetCount(String databaseFilePath)
@@ -53,24 +55,31 @@ namespace PasswordManager
         public SecretThing ReadSingleResult(int secretID, String convertedPwd, String databaseFilePath)
         {
             String sql = "select * from secrets where secretId = " + secretID;
-            SecretThing resultSecret = new SecretThing(); 
+            SecretThing clearTxtSecret = new SecretThing(); 
             SQLiteCommand command = new SQLiteCommand(sql, sql_con);
             SQLiteDataReader reader = command.ExecuteReader();
             reader.Read();
             // this breaks silently if there's more than 1.
             // it may break noisily if there's no result!
-            resultSecret.title = reader["title"].ToString();
-            Console.WriteLine("title: {0}", resultSecret.title);
-            resultSecret.comment = reader["comment"].ToString();
-            resultSecret.url = reader["url"].ToString();
-            resultSecret.password = reader["password"].ToString();
+            clearTxtSecret = ConvertReaderItemToSecret(reader, convertedPwd);
+            return clearTxtSecret;
+        }
+
+        private SecretThing ConvertReaderItemToSecret(SQLiteDataReader reader, String convertedPwd)
+        {
+            SecretThing encryptedtSecret = new SecretThing();
+            encryptedtSecret.title = reader["title"].ToString();
+            Console.WriteLine("title: {0}", encryptedtSecret.title);
+            encryptedtSecret.comment = reader["comment"].ToString();
+            encryptedtSecret.url = reader["url"].ToString();
+            encryptedtSecret.password = reader["password"].ToString();
             // This seems like going round the houses but...
             String realtmp = reader["secretId"].ToString();
             Console.WriteLine("secretIdL {0}", realtmp);
-            resultSecret.secretId = Int32.Parse(realtmp);
-            resultSecret.privateKey = reader["privateKey"].ToString();
-            SecretThing unencryptedSecret = crypt.DecryptSecret(resultSecret, convertedPwd);
-            return unencryptedSecret;
+            encryptedtSecret.secretId = Int32.Parse(realtmp);
+            encryptedtSecret.privateKey = reader["privateKey"].ToString();
+            SecretThing clearTextSecret = crypt.DecryptSecret(encryptedtSecret, convertedPwd);
+            return clearTextSecret;
         }
 
         // may need to change the return type to be a list containing the updated
@@ -93,9 +102,18 @@ namespace PasswordManager
             ExecuteQuery(sql, databaseFilePath);
         }
 
-        public List<SecretThing> getAllRecords(int count, String databaseFilePath)
+        public List<SecretThing> getAllRecords(int count, String databaseFilePath, String convertedPwd)
         {
+            List<SecretThing> allDBResultsList = new List<SecretThing>();
+            string sql = "select * from secrets order by secretId asc";
+            SQLiteCommand command = new SQLiteCommand(sql, sql_con);
+            SQLiteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                allDBResultsList.Add(ConvertReaderItemToSecret(reader, convertedPwd));
+            }
 
+            return allDBResultsList;
         }
 
         public void DeleteSingleResult(SecretThing inputSecret, String databaseFilePath)

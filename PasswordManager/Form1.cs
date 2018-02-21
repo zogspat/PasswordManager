@@ -17,6 +17,7 @@ namespace PasswordManager
         private DatabaseActions dbActions = new DatabaseActions();
         private CryptoOperations cryptoOps = new CryptoOperations();
         private String _convertedPwd;
+        private List<SecretThing> _allDBRecords = new List<SecretThing>();
         public Form1()
         {
             InitializeComponent();
@@ -99,7 +100,8 @@ namespace PasswordManager
                 Console.WriteLine("Enter!!");
                 PasswordConverter paswdConverter = new PasswordConverter(pwdTextBox.Text);
                 _convertedPwd = paswdConverter.ConvertPwdTo16Bytes();
-                _kickoff.StartWithPasswordFromInputBox(_convertedPwd);
+                _allDBRecords =  _kickoff.StartWithPasswordFromInputBox(_convertedPwd);
+                Console.WriteLine("back at form with {0} recs", _allDBRecords.Count);
                 
             }
 
